@@ -33,12 +33,13 @@ jobs:
           --reporter-htmlextra-export newman/report.html
           
     - name: Archive Test Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-report
         path: newman/report.html
         retention-days: 30
+        compression-level: 9 # Maximum compression for smaller artifacts
         
     - name: Check Test Status
       if: failure()

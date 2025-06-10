@@ -156,9 +156,18 @@ newman run serverest_collection.json --environment serverest_dev_environment_glo
   - Métricas de tempo
 
 ### Monitoramento em CI/CD
-- Integração com GitHub Actions
-- Execução automática na branch principal
-- Notificações em caso de falha
+- **Integração com GitHub Actions:**
+  - Execução automática em pushes para main/master
+  - Execução em pull requests
+  - Execução diária agendada (meia-noite UTC)
+- **Relatórios:**
+  - HTML reports gerados automaticamente
+  - Armazenados como artifacts no GitHub
+  - Disponíveis para download por 30 dias
+- **Notificações:**
+  - Falhas notificadas na interface do GitHub
+  - Status check em pull requests
+  - Erro detalhado em caso de falha nos testes
 
 ## Troubleshooting
 
