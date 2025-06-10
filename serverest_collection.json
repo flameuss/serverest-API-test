@@ -1,0 +1,979 @@
+{
+	"info": {
+		"_postman_id": "a9145f89-8a71-47fe-a3f5-31b33552975d",
+		"name": "Serverest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14880552",
+		"_collection_link": "https://test99-6010.postman.co/workspace/7d13a181-68d4-4d92-995f-c3e49823970c/collection/14880552-a9145f89-8a71-47fe-a3f5-31b33552975d?action=share&source=collection_link&creator=14880552"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Realizar login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseJson = pm.response.json();\r",
+									"let tokenSplit = responseJson['authorization'].split(' ')\r",
+									"tokenSplit[1]\r",
+									"pm.globals.set(\"accessToken\", tokenSplit[1])\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"luishenrique@qa.com\",\r\n  \"password\": \"teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "Listar usuários cadastrados",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							],
+							"query": [
+								{
+									"key": "nome",
+									"value": "fulano",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar usuários",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomNumber = Math.floor(Math.random() * 9000)",
+									"const randonName = `User Number ${randomNumber}`",
+									"const randonEmail = `name.${randomNumber}@qa.com`",
+									"pm.environment.set('email', randonEmail)",
+									"pm.environment.set('nome', randonName)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"if(pm.response.code === 201){",
+									"    var responseJson = pm.response.json();",
+									"    pm.environment.set('userId', responseJson._id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"{{nome}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar usuários por ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios?_id=D3wbJXxQnk1I6KAe",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "D3wbJXxQnk1I6KAe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir usuários",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/usuarios/UR2hFFXhfonSh0TN",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								"UR2hFFXhfonSh0TN"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "UR2hFFXhfonSh0TN",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar usuários",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Luis Henrique da Silva Campos\",\r\n  \"email\": \"luishenrique@qa.com\",\r\n  \"password\": \"teste123\",\r\n  \"administrador\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios/D3wbJXxQnk1I6KAe",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								"D3wbJXxQnk1I6KAe"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "UR2hFFXhfonSh0TN",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Listar produtos cadastrados",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/produtos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "QOvhUAGLFi8YtTyq",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar produtos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const loginRequest = {",
+									"    url: pm.environment.get('baseURL') + '/login',",
+									"    method: 'POST',",
+									"    body:{",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            email: pm.environment.get('email'),",
+									"            password: pm.environment.get('password')",
+									"        }),",
+									"        options:{",
+									"            raw:{",
+									"                language: 'json'",
+									"            }",
+									"        }",
+									"    }",
+									"}",
+									"pm.sendRequest(loginRequest, function(err, response){",
+									"    let resJson = response.json()",
+									"    let tokenSplit = resJson['authorization'].split(' ')",
+									"    pm.environment.set(\"accessToken\", tokenSplit[1])",
+									"});",
+									"pm.environment.set('randomProduct', `product ${Math.random()}`)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json()",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"if(pm.response.code == 201){",
+									"    pm.environment.set('newProductId', responseJson._id)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"{{randomProduct}}\",\r\n  \"preco\": 10000,\r\n  \"descricao\": \"Smartphone\",\r\n  \"quantidade\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar produto por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos/{{newProductId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos",
+								"{{newProductId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Product deleted successfuly\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql('Registro excluído com sucesso');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos/{{newProductId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos",
+								"{{newProductId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Iphone 14 pro\",\r\n    \"preco\": 10000,\r\n    \"descricao\": \"Smartphone\",\r\n    \"quantidade\": 101\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos/QOvhUAGLFi8YtTyq",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos",
+								"QOvhUAGLFi8YtTyq"
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "QOvhUAGLFi8YtTyq",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Carrinhos",
+			"item": [
+				{
+					"name": "Listar carrinhos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/carrinhos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carrinhos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar carrinhos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"produtos\": [\r\n        {\r\n            \"idProduto\": \"BeeJh5lz3k6kSIzA\",\r\n            \"quantidade\": 1\r\n        },\r\n        {\r\n            \"idProduto\": \"7DPZcV7Npv7gb1SI\",\r\n            \"quantidade\": 5\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/carrinhos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carrinhos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar carrinho por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carrinhos/?_id=8Hg3HOEqjVbtf5dx",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carrinhos",
+								""
+							],
+							"query": [
+								{
+									"key": "_id",
+									"value": "8Hg3HOEqjVbtf5dx"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir carrinho",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carrinhos/concluir-compra",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carrinhos",
+								"concluir-compra"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir carrinho e retornar produtos para estoque",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/carrinhos/cancelar-compra",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"carrinhos",
+								"cancelar-compra"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "workflow-tests",
+			"item": [
+				{
+					"name": "Cadastrar usuários",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomNumber = Math.floor(Math.random() * 9000)",
+									"const randonName = `User Number ${randomNumber}`",
+									"const randonEmail = `name.${randomNumber}@qa.com`",
+									"pm.environment.set('email', randonEmail)",
+									"pm.environment.set('nome', randonName)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"{{nome}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/usuarios/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"usuarios",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar produtos",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const loginRequest = {",
+									"    url: pm.environment.get('baseURL') + '/login',",
+									"    method: 'POST',",
+									"    body:{",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            email: pm.environment.get('email'),",
+									"            password: pm.environment.get('password')",
+									"        }),",
+									"        options:{",
+									"            raw:{",
+									"                language: 'json'",
+									"            }",
+									"        }",
+									"    }",
+									"}",
+									"pm.sendRequest(loginRequest, function(err, response){",
+									"    let resJson = response.json()",
+									"    let tokenSplit = resJson['authorization'].split(' ')",
+									"    pm.environment.set(\"accessToken\", tokenSplit[1])",
+									"});",
+									"pm.environment.set('randomProduct', `product ${Math.random()}`)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json()",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"if(pm.response.code == 201){",
+									"    pm.environment.set('newProductId', responseJson._id)",
+									"}",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"{{randomProduct}}\",\r\n  \"preco\": 10000,\r\n  \"descricao\": \"Smartphone\",\r\n  \"quantidade\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar produto por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos/{{newProductId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos",
+								"{{newProductId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Product deleted successfuly\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.eql('Registro excluído com sucesso');",
+									"});",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/produtos/{{newProductId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"produtos",
+								"{{newProductId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
