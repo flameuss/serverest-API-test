@@ -25,10 +25,11 @@ jobs:
         npm install -g newman
         npm install -g newman-reporter-htmlextra
         
-    - name: Run API Tests
+    - name: Run Workflow Tests
       run: |
         newman run serverest_collection.json \
           --environment serverest_dev_environment_global.json \
+          --folder "workflow-tests" \
           --reporters cli,htmlextra \
           --reporter-htmlextra-export newman/report.html
           
