@@ -103,16 +103,25 @@ Para criar um novo ambiente:
 newman run serverest_collection.json --environment serverest_dev_environment_global.json --reporters cli,htmlextra
 ```
 
-### Execução por Fluxo
+### Execução dos Testes de Workflow
+O projeto está configurado para executar os testes de workflow que validam a integração entre diferentes funcionalidades da API. Para executar:
+
 ```bash
-# Executar apenas testes de usuários
-newman run serverest_collection.json --environment serverest_dev_environment_global.json --folder "usuarios" --reporters cli,htmlextra
-
-# Executar apenas testes de produtos
-newman run serverest_collection.json --environment serverest_dev_environment_global.json --folder "produtos" --reporters cli,htmlextra
-
-# Executar fluxo completo de workflow
 newman run serverest_collection.json --environment serverest_dev_environment_global.json --folder "workflow-tests" --reporters cli,htmlextra
+```
+
+Este comando executa a suíte de testes workflow que inclui:
+1. Cadastro de usuário (com dados dinâmicos)
+2. Autenticação do usuário
+3. Criação de produto (com dados dinâmicos)
+4. Validação do produto criado
+5. Limpeza dos dados de teste
+
+Todos os testes incluem validações de:
+- Status code apropriado
+- Tempo de resposta (< 300ms)
+- Consistência dos dados
+- Sucesso das operações
 ```
 
 ## Fluxos de Teste
@@ -155,19 +164,28 @@ newman run serverest_collection.json --environment serverest_dev_environment_glo
   - Logs de erro
   - Métricas de tempo
 
-### Monitoramento em CI/CD
-- **Integração com GitHub Actions:**
-  - Execução automática em pushes para main/master
-  - Execução em pull requests
-  - Execução diária agendada (meia-noite UTC)
-- **Relatórios:**
-  - HTML reports gerados automaticamente
-  - Armazenados como artifacts no GitHub
-  - Disponíveis para download por 30 dias
-- **Notificações:**
-  - Falhas notificadas na interface do GitHub
+## CI/CD com GitHub Actions
+
+O projeto utiliza GitHub Actions para automação dos testes. O pipeline está configurado para executar apenas os testes de workflow (`workflow-tests`), que são os mais críticos e validam o fluxo completo da aplicação.
+
+### Gatilhos de Execução
+- Push para branches `main` ou `master`
+- Pull Requests para `main` ou `master`
+- Agendamento diário (meia-noite UTC)
+
+### Relatórios e Artefatos
+- **Geração Automática**: Relatórios HTML gerados a cada execução
+- **Armazenamento**: Artefatos compactados e armazenados no GitHub
+- **Retenção**: Disponíveis para download por 30 dias
+- **Localização**: Acessíveis na aba Actions do repositório
+
+### Monitoramento
+- **Status**: Visível diretamente no GitHub
+- **Notificações**: 
+  - Falhas notificadas automaticamente
   - Status check em pull requests
-  - Erro detalhado em caso de falha nos testes
+  - Detalhamento de erros na interface
+- **Performance**: Métricas de tempo de execução disponíveis
 
 ## Troubleshooting
 
